@@ -19,7 +19,7 @@
         <KeyBinding Key="Left" Command="{Binding LeftKeyPressedCommand}"></KeyBinding>
     </Window.InputBindings>
     <Viewbox Stretch="Fill" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-        <Canvas Name="GameBoard" Width="{Binding SnakeGameLogic.GameBoardWidthPixels, Mode=TwoWay}" Height="{Binding SnakeGameLogic.GameBoardHeightPixels, Mode=TwoWay}">
+        <Canvas Background="WhiteSmoke" Name="GameBoard" Width="{Binding SnakeGameLogic.GameBoardWidthPixels, Mode=TwoWay}" Height="{Binding SnakeGameLogic.GameBoardHeightPixels, Mode=TwoWay}">
             <Ellipse Width="{Binding SnakeGameLogic.TheCherry.WidthPixels, Mode=OneWay}" 
                      Height="{Binding SnakeGameLogic.TheCherry.HeightPixels, Mode=OneWay}" 
                      Fill="Red">
