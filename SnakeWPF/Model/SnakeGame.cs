@@ -11,11 +11,15 @@ namespace SnakeWPF.Model
     {
         #region Fields
 
+        private Snake _theSnake;
+        private Cherry _theCherry;
         private double _gameBoardWidthPixels;
         private double _gameBoardHeightPixels;
         private DispatcherTimer _gameTimer;
         private int _gameStepMilliSeconds;
         private int _gameLevel;
+        private bool _isGameOver;
+        private int _restartCountdownSeconds;
         private DispatcherTimer _restartTimer;
         
         #endregion
@@ -28,8 +32,8 @@ namespace SnakeWPF.Model
         public SnakeGame()
         {
             // Initialise the game board.
-            _gameBoardWidthPixels = Constants.DefaultGameBoardWidthPixels;
-            _gameBoardHeightPixels = Constants.DefaultGameBoardHeightPixels;
+            GameBoardWidthPixels = Constants.DefaultGameBoardWidthPixels;
+            GameBoardHeightPixels = Constants.DefaultGameBoardHeightPixels;
 
             // Listen for events from the snake.
             Snake.OnHitBoundary += new HitBoundary(HitBoundaryEventHandler);
@@ -48,7 +52,7 @@ namespace SnakeWPF.Model
         #region Properties
 
         /// <summary>
-        /// Gets the game board width in pixels.
+        /// Gets or sets the game board width in pixels.
         /// </summary>
         public double GameBoardWidthPixels
         {
@@ -59,14 +63,14 @@ namespace SnakeWPF.Model
             set
             {
                 _gameBoardWidthPixels = value;
-                RaisePropertyChanged("GameBoardWidthPixels");
+                RaisePropertyChanged();
 
                 TheSnake.GameBoardWidthPixels = value;
             }
         }
 
         /// <summary>
-        /// Gets the game board height in pixels.
+        /// Gets or sets the game board height in pixels.
         /// </summary>
         public double GameBoardHeightPixels
         {
@@ -77,21 +81,53 @@ namespace SnakeWPF.Model
             set
             {
                 _gameBoardHeightPixels = value;
-                RaisePropertyChanged("GameBoardHeightPixels");
+                RaisePropertyChanged();
 
                 TheSnake.GameBoardHeightPixels = value;
             }
         }
 
         /// <summary>
-        /// Gets the snake.
+        /// Gets or sets the snake.
         /// </summary>
-        public Snake TheSnake { get; private set; }
+        public Snake TheSnake
+        {
+            get
+            {
+                if (_theSnake == null)
+                {
+                    _theSnake = new Snake(GameBoardWidthPixels, GameBoardHeightPixels);
+                }
+
+                return _theSnake;
+            }
+            private set
+            {
+                _theSnake = value;
+                RaisePropertyChanged();
+            }
+        }
 
         /// <summary>
-        /// Gets the cherry.
+        /// Gets or sets the cherry.
         /// </summary>
-        public Cherry TheCherry { get; private set; }
+        public Cherry TheCherry
+        {
+            get
+            {
+                if (_theCherry == null)
+                {
+                    _theCherry = new Cherry(_gameBoardWidthPixels, _gameBoardHeightPixels, TheSnake.TheSnakeHead.XPosition, TheSnake.TheSnakeHead.YPosition);
+                }
+
+                return _theCherry;
+            }
+            private set
+            {
+                _theCherry = value;
+                RaisePropertyChanged();
+            }
+        }
 
         /// <summary>
         /// Gets the title text.
@@ -105,9 +141,21 @@ namespace SnakeWPF.Model
         }
 
         /// <summary>
-        /// Gets the game over boolean flag.
+        /// Gets or sets the game over boolean flag.
         /// </summary>
-        public bool IsGameOver { get; private set; }
+        public bool IsGameOver
+        {
+            get
+            {
+                return _isGameOver;
+            }
+            private set
+            {
+                _isGameOver = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(IsGameRunning));
+            }
+        }
 
         /// <summary>
         /// Gets the game running boolean flag.
@@ -121,9 +169,20 @@ namespace SnakeWPF.Model
         }
 
         /// <summary>
-        /// Gets the current restart countdown status.
+        /// Gets or sets the current restart countdown status.
         /// </summary>
-        public int RestartCountdownSeconds { get; private set; }
+        public int RestartCountdownSeconds
+        {
+            get
+            {
+                return _restartCountdownSeconds;
+            }
+            private set
+            {
+                _restartCountdownSeconds = value;
+                RaisePropertyChanged();
+            }
+        }
 
         #endregion
 
@@ -136,22 +195,17 @@ namespace SnakeWPF.Model
         {
             // Initialise the snake and cherry.
             TheSnake = new Snake(_gameBoardWidthPixels, _gameBoardHeightPixels);
-            RaisePropertyChanged("TheSnake");
             TheCherry = new Cherry(_gameBoardWidthPixels, _gameBoardHeightPixels, TheSnake.TheSnakeHead.XPosition, TheSnake.TheSnakeHead.YPosition);
-            RaisePropertyChanged("TheCherry");
 
             // Set the game over flag.
             IsGameOver = false;
-            RaisePropertyChanged("IsGameOver");
-            RaisePropertyChanged("IsGameRunning");
 
             // Reset the restart timer.
             RestartCountdownSeconds = Constants.RestartCountdownStartSeconds;
-            RaisePropertyChanged("RestartCountdownSeconds");
 
             // Initialise the game timer.
             _gameLevel = Constants.StartLevel;
-            RaisePropertyChanged("TitleText");
+            RaisePropertyChanged(nameof(TitleText));
             _gameStepMilliSeconds = Constants.DefaultGameStepMilliSeconds;
             _gameTimer = new DispatcherTimer();
             _gameTimer.Interval = TimeSpan.FromMilliseconds(_gameStepMilliSeconds);
@@ -166,7 +220,6 @@ namespace SnakeWPF.Model
         {
             // Initialise the restart countdown.
             RestartCountdownSeconds = Constants.RestartCountdownStartSeconds;
-            RaisePropertyChanged("RestartCountdownSeconds");
             _restartTimer = new DispatcherTimer();
             _restartTimer.Interval = TimeSpan.FromMilliseconds(Constants.RestartStepMilliSeconds);
             _restartTimer.Tick += new EventHandler(RestartTimerEventHandler);
@@ -179,8 +232,6 @@ namespace SnakeWPF.Model
         private void HitBoundaryEventHandler()
         {
             IsGameOver = true;
-            RaisePropertyChanged("IsGameOver");
-            RaisePropertyChanged("IsGameRunning");
         }
 
         /// <summary>
@@ -189,8 +240,6 @@ namespace SnakeWPF.Model
         private void HitSnakeEventHandler()
         {
             IsGameOver = true;
-            RaisePropertyChanged("IsGameOver");
-            RaisePropertyChanged("IsGameRunning");
         }
 
         /// <summary>
@@ -203,7 +252,7 @@ namespace SnakeWPF.Model
 
             // Increase the game level and speed.
             _gameLevel++;
-            RaisePropertyChanged("TitleText");
+            RaisePropertyChanged(nameof(TitleText));
             if (_gameLevel < Constants.EndLevel)
             {
                 _gameStepMilliSeconds = _gameStepMilliSeconds - Constants.DecreaseGameStepMilliSeconds;
@@ -213,8 +262,6 @@ namespace SnakeWPF.Model
             {
                 // Maximum level reached - game is complete.
                 IsGameOver = true;
-                RaisePropertyChanged("IsGameOver");
-                RaisePropertyChanged("IsGameRunning");
             }
         }
 
@@ -249,7 +296,6 @@ namespace SnakeWPF.Model
         private void RestartTimerEventHandler(object sender, EventArgs e)
         {
             RestartCountdownSeconds--;
-            RaisePropertyChanged("RestartCountdownSeconds");
 
             if (RestartCountdownSeconds == 0)
             {

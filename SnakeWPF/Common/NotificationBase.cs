@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace SnakeWPF.Common
 {
@@ -28,10 +29,10 @@ namespace SnakeWPF.Common
         /// <summary>
         /// The RaisePropertyChanged method is called raise a property changed event. 
         /// </summary>
-        /// <param name="property"></param>
-        protected void RaisePropertyChanged(string property)
+        /// <param name="propertyname"></param>
+        protected void RaisePropertyChanged([CallerMemberName] string propertyname = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(property));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyname));
         }
 
         #endregion

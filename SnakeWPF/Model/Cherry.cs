@@ -54,8 +54,8 @@ namespace SnakeWPF.Model
             while (!cherryMoved)
             {
                 // Attempt to relocate the cherry - somewhere on the game board.
-                _xPosition = _randomNumber.Next(Constants.MinimumPosition, Constants.MaximumPosition);
-                _yPosition = _randomNumber.Next(Constants.MinimumPosition, Constants.MaximumPosition);
+                XPosition = _randomNumber.Next(Constants.MinimumPosition, Constants.MaximumPosition);
+                YPosition = _randomNumber.Next(Constants.MinimumPosition, Constants.MaximumPosition);
                 // Ensure the location of the cherry is a reasonable distance from the snake's head.
                 xDiff = Math.Abs(_xPosition - theSnake.TheSnakeHead.XPosition);
                 yDiff = Math.Abs(_yPosition - theSnake.TheSnakeHead.YPosition);
@@ -78,14 +78,6 @@ namespace SnakeWPF.Model
                     }
                 }
             }
-
-            // The cherry has been moved to a new location, away from the snake.
-            RaisePropertyChanged("XPosition");
-            RaisePropertyChanged("XPositionPixels");
-            RaisePropertyChanged("XPositionPixelsScreen");
-            RaisePropertyChanged("YPosition");
-            RaisePropertyChanged("YPositionPixels");
-            RaisePropertyChanged("YPositionPixelsScreen");
         }
 
         #endregion

@@ -60,7 +60,7 @@ namespace SnakeWPF.Model
             set
             {
                 _gameBoardWidthPixels = value;
-                RaisePropertyChanged("GameBoardWidthPixels");
+                RaisePropertyChanged();
 
                 // Update the snake.
                 TheSnakeHead.GameBoardWidthPixels = value;
@@ -84,7 +84,7 @@ namespace SnakeWPF.Model
             set
             {
                 _gameBoardHeightPixels = value;
-                RaisePropertyChanged("GameBoardHeightPixels");
+                RaisePropertyChanged();
 
                 // Update the snake.
                 TheSnakeHead.GameBoardHeightPixels = value;

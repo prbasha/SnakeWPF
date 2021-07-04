@@ -56,11 +56,11 @@ namespace SnakeWPF.Model
             set
             {
                 _gameBoardWidthPixels = value;
-                RaisePropertyChanged("GameBoardWidthPixels");
-                RaisePropertyChanged("Width");
-                RaisePropertyChanged("XPosition");
-                RaisePropertyChanged("XPositionPixels");
-                RaisePropertyChanged("XPositionPixelsScreen");
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Width));
+                RaisePropertyChanged(nameof(XPosition));
+                RaisePropertyChanged(nameof(XPositionPixels));
+                RaisePropertyChanged(nameof(XPositionPixelsScreen));
             }
         }
 
@@ -76,11 +76,11 @@ namespace SnakeWPF.Model
             set
             {
                 _gameBoardHeightPixels = value;
-                RaisePropertyChanged("GameBoardHeightPixels");
-                RaisePropertyChanged("Height");
-                RaisePropertyChanged("YPosition");
-                RaisePropertyChanged("YPositionPixels");
-                RaisePropertyChanged("YPositionPixelsScreen");
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(Height));
+                RaisePropertyChanged(nameof(YPosition));
+                RaisePropertyChanged(nameof(YPositionPixels));
+                RaisePropertyChanged(nameof(YPositionPixelsScreen));
             }
         }
 
@@ -93,6 +93,14 @@ namespace SnakeWPF.Model
             {
                 return _xPosition;
             }
+            protected set
+            {
+                _xPosition = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(XPosition));
+                RaisePropertyChanged(nameof(XPositionPixels));
+                RaisePropertyChanged(nameof(XPositionPixelsScreen));
+            }
         }
 
         /// <summary>
@@ -103,6 +111,14 @@ namespace SnakeWPF.Model
             get
             {
                 return _yPosition;
+            }
+            protected set
+            {
+                _yPosition = value;
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(YPosition));
+                RaisePropertyChanged(nameof(YPositionPixels));
+                RaisePropertyChanged(nameof(YPositionPixelsScreen));
             }
         }
 

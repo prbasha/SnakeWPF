@@ -50,8 +50,8 @@ namespace SnakeWPF.Model
             set
             {
                 _directionOfTravel = value;
-                RaisePropertyChanged("DirectionOfTravel");
-                RaisePropertyChanged("DirectionOfTravelDegrees");
+                RaisePropertyChanged();
+                RaisePropertyChanged(nameof(DirectionOfTravelDegrees));
             }
         }
 
@@ -96,31 +96,19 @@ namespace SnakeWPF.Model
         {
             if (_directionOfTravel == Direction.Up)
             {
-                _yPosition = _yPosition - Constants.StepSize;
-                RaisePropertyChanged("YPosition");
-                RaisePropertyChanged("YPositionPixels");
-                RaisePropertyChanged("YPositionPixelsScreen");
+                YPosition = YPosition - Constants.StepSize;
             }
             else if (_directionOfTravel == Direction.Right)
             {
-                _xPosition = _xPosition + Constants.StepSize;
-                RaisePropertyChanged("XPosition");
-                RaisePropertyChanged("XPositionPixels");
-                RaisePropertyChanged("XPositionPixelsScreen");
+                XPosition = XPosition + Constants.StepSize;
             }
             else if (_directionOfTravel == Direction.Down)
             {
-                _yPosition = _yPosition + Constants.StepSize;
-                RaisePropertyChanged("YPosition");
-                RaisePropertyChanged("YPositionPixels");
-                RaisePropertyChanged("YPositionPixelsScreen");
+                YPosition = YPosition + Constants.StepSize;
             }
             else if (_directionOfTravel == Direction.Left)
             {
-                _xPosition = _xPosition - Constants.StepSize;
-                RaisePropertyChanged("XPosition");
-                RaisePropertyChanged("XPositionPixels");
-                RaisePropertyChanged("XPositionPixelsScreen");
+                XPosition = XPosition - Constants.StepSize;
             }
         }
 
